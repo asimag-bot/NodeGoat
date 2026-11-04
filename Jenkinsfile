@@ -4,18 +4,21 @@ pipeline {
     stages {
         stage('Code Checkout') {
             steps {
-                echo '=== Step 1: GitHub-dan NodeGoat kodu kopyalanır ==='
+                git branch: 'master', url: 'https://github.com/asimag-bot/NodeGoat.git'
             }
         }
-        stage('SAST Dependency Scan') {
+        
+        stage('OWASP / SAST Dependency Scan') {
             steps {
-                echo '=== Step 2: Paketlər və zəifliklər skan olundu ==='
-                echo '[SUCCESS] Bütün asılılıqlar və zəifliklər bərpa olundu! 0 Boşluq.'
+                echo '=== OWASP Audit / SAST Skanı Başladılır ==='
+                // Real zəiflikləri skan edir və kritik boşluq tapılarsa pipeline-ı avtomatik dayandırır
+                sh 'npm audit --audit-level=high'
             }
         }
+
         stage('Deploy') {
             steps {
-                echo '=== Step 3: Tətbiq təhlükəsiz şəkildə deploy olundu! ==='
+                echo '=== Step 3: Tətbiq uğurla deploy olundu ==='
             }
         }
     }
